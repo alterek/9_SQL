@@ -1,0 +1,41 @@
+CREATE TABLE Products
+(
+    ID INT NOT NULL PRIMARY KEY,
+    Name NVARCHAR(20)
+)
+
+CREATE TABLE Categories
+(
+    ID INT NOT NULL PRIMARY KEY,
+    Name NVARCHAR(20)
+)
+
+CREATE TABLE ProductsCategories
+(
+    ID INT NOT NULL PRIMARY KEY,
+    Product_ID INT NOT NULL FOREIGN KEY REFERENCES Products(ID),
+    Category_ID INT NOT NULL FOREIGN KEY REFERENCES Categories(ID)
+)
+
+
+
+insert into Products values (1, 'PC')
+insert into Products values (2, 'Printer')
+insert into Products values (3, 'Laptop')
+
+insert into Categories values (1, 'First')
+insert into Categories values (2, 'Second')
+insert into Categories values (3, 'Third')
+
+insert into ProductsCategories values (1, 1, 1)
+insert into ProductsCategories values (2, 1, 2)
+insert into ProductsCategories values (3, 2, 2)
+insert into ProductsCategories values (4, 2, 3)
+
+
+
+select distinct Products.Name, Categories.Name from Products
+join ProductsCategories on ProductsCategories.Product_ID = Products.ID
+join Categories on ProductsCategories.Category_ID = Categories.ID
+union select Name, '' from Products
+where ID not in (select Product_ID from ProductsCategories)
